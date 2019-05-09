@@ -23,7 +23,7 @@ val backColor : Int = Color.parseColor("#BDBDBD")
 val rFactor : Float = 3.7f
 
 fun Int.inverse() : Float = 1f / this
-fun Float.scaleFactor() : Float = 1f / this
+fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.mirrorValue(a : Int, b : Int) : Float {
@@ -65,15 +65,16 @@ fun Canvas.drawESLCNode(i : Int, scale : Float, paint : Paint) {
 class EachSideLineCircleView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val renderer : Renderer = Renderer(this)
 
     override fun onDraw(canvas : Canvas) {
-
+        renderer.render(canvas, paint)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -222,7 +223,7 @@ class EachSideLineCircleView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : EachSideLineCircleView {
             val view : EachSideLineCircleView = EachSideLineCircleView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
