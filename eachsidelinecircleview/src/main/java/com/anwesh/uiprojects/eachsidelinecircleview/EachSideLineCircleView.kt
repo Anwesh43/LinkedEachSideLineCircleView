@@ -33,13 +33,14 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
 fun Canvas.drawEachSideLine(i : Int, size : Float, sc : Float, paint : Paint) {
+    val sci : Float = sc.divideScale(i, lines)
     val r : Float = size / rFactor
-    val y : Float = -size * sc.divideScale(i, lines)
+    val y : Float = -size -size * sci
     save()
-    translate(-size + i * 2 * size, -size)
+    translate(-size + i * 2 * size, size)
     drawLine(0f, 0f, 0f, -size, paint)
-    drawLine(0f, -size, 0f, -size + y, paint)
-    drawCircle(0f, y, r * sc, paint)
+    drawLine(0f, -size, 0f, y, paint)
+    drawCircle(0f, y, r * sci, paint)
     restore()
 }
 
@@ -55,7 +56,8 @@ fun Canvas.drawESLCNode(i : Int, scale : Float, paint : Paint) {
     paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(w / 2, gap * (i + 1))
-    rotate(90f * sc2 * (1f - 2 * i))
+    rotate(90f * sc2 * (1f - 2 * (i % 2)))
+    drawLine(-size, size, size, size, paint)
     for (j in 0..(lines - 1)) {
         drawEachSideLine(j, size, sc1, paint)
     }
