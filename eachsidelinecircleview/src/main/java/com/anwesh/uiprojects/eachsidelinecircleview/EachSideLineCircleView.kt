@@ -193,6 +193,27 @@ class EachSideLineCircleView(ctx : Context) : View(ctx) {
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
         }
+    }
 
+    data class Renderer(var view : EachSideLineCircleView) {
+
+        private val animator : Animator = Animator(view)
+        private val eslc : EachSideLineCircle = EachSideLineCircle(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            eslc.draw(canvas, paint)
+            animator.animate {
+                eslc.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            eslc.startUpdating {
+                animator.start()
+            }
+        }
     }
 }
