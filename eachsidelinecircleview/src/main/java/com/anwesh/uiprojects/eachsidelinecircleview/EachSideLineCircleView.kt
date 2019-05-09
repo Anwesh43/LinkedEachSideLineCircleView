@@ -216,4 +216,13 @@ class EachSideLineCircleView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : EachSideLineCircleView {
+            val view : EachSideLineCircleView = EachSideLineCircleView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
